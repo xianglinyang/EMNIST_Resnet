@@ -29,7 +29,7 @@ all_classifiers = {
 }
 
 
-class MNISTModule(pl.LightningModule):
+class EMNISTModule(pl.LightningModule):
     def __init__(self, hparams):
         super().__init__()
         self.hparams = hparams
