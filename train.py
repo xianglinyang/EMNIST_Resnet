@@ -5,13 +5,12 @@ https://github.com/huyvnphan/PyTorch_CIFAR10/tree/master/cifar10_models
 import os
 from argparse import ArgumentParser
 
-import torch
 from pytorch_lightning import Trainer, seed_everything
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger, TensorBoardLogger
 
-from data import MNISTData
-from module import MNISTModule
+from data import EMNISTData
+from module import EMNISTModule
 
 
 def main(args):
@@ -47,8 +46,8 @@ def main(args):
 
     )
 
-    model = MNISTModule(args)
-    data = MNISTData(args)
+    model = EMNISTModule(args)
+    data = EMNISTData(args)
     trainloader = data.train_dataloader()
     data.save_train_data(trainloader, args.filepath)
     testloader = data.test_dataloader()
@@ -86,7 +85,7 @@ if __name__ == "__main__":
 
     parser.add_argument("--precision", type=int, default=32, choices=[16, 32])
     parser.add_argument("--batch_size", type=int, default=250)
-    parser.add_argument("--max_epochs", type=int, default=20)
+    parser.add_argument("--max_epochs", type=int, default=50)
     parser.add_argument("--num_workers", type=int, default=2)
     parser.add_argument("--gpu_id", type=str, default="0")
 
