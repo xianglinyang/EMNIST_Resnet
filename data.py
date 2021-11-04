@@ -1,24 +1,25 @@
 import os
-
 import pytorch_lightning as pl
-import requests
 from torch.utils.data import DataLoader
-from torchvision import transforms as T
-from torchvision.datasets import MNIST
-from torchvision.transforms import ToTensor
-from tqdm import tqdm
+from torchvision.datasets import EMNIST
+import torchvision.transforms as transforms
 import torch
 
 
 
-class MNISTData(pl.LightningDataModule):
+class EMNISTData(pl.LightningDataModule):
     def __init__(self, args):
         super().__init__()
         self.hparams = args
 
     def train_dataloader(self):
-        transform = ToTensor()
-        dataset = MNIST("mnist", train=True, download=True, transform=transform)
+        # choose the first 10 letters
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(
+                (0.1307,), (0.3081,)),
+        ])
+        dataset = EMNIST('EMNIST', split='letters', train=True, download=True, transform=transform)
         dataloader = DataLoader(
             dataset,
             batch_size=self.hparams.batch_size,
@@ -28,8 +29,12 @@ class MNISTData(pl.LightningDataModule):
         return dataloader
 
     def val_dataloader(self):
-        transform = ToTensor()
-        dataset = MNIST("mnist", train=False, download=True, transform=transform)
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(
+                (0.1307,), (0.3081,)),
+        ])
+        dataset = EMNIST("EMNIST", split='letters', train=False, download=True, transform=transform)
         dataloader = DataLoader(
             dataset,
             batch_size=self.hparams.batch_size,
