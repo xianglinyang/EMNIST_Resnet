@@ -5,6 +5,7 @@ from torchvision.datasets import EMNIST
 import torchvision.transforms as transforms
 import torch
 
+from torchvision.datasets.utils import makedir_exist_ok
 
 
 class EMNISTData(pl.LightningDataModule):
@@ -19,7 +20,7 @@ class EMNISTData(pl.LightningDataModule):
             transforms.Normalize(
                 (0.1307,), (0.3081,)),
         ])
-        dataset = EMNIST('.data', split='digits', train=True, download=True, transform=transform)
+        dataset = EMNIST('data', split='digits', train=True, download=True, transform=transform)
         dataloader = DataLoader(
             dataset,
             batch_size=self.hparams.batch_size,
@@ -34,7 +35,7 @@ class EMNISTData(pl.LightningDataModule):
             transforms.Normalize(
                 (0.1307,), (0.3081,)),
         ])
-        dataset = EMNIST(".data", split='digits', train=False, download=True, transform=transform)
+        dataset = EMNIST("data", split='digits', train=False, download=True, transform=transform)
         dataloader = DataLoader(
             dataset,
             batch_size=self.hparams.batch_size,
@@ -60,8 +61,9 @@ class EMNISTData(pl.LightningDataModule):
                 trainset_label = targets
 
         training_path = os.path.join(path, "Training_data")
-        if not os.path.exists(training_path):
-            os.mkdir(training_path)
+        makedir_exist_ok(training_path)
+        # if not os.path.exists(training_path):
+        #     os.mkdir(training_path)
         torch.save(trainset_data, os.path.join(training_path, "training_dataset_data.pth"))
         torch.save(trainset_label, os.path.join(training_path, "training_dataset_label.pth"))
 
@@ -79,7 +81,8 @@ class EMNISTData(pl.LightningDataModule):
                 testset_label = targets
 
         testing_path = os.path.join(path, "Testing_data")
-        if not os.path.exists(testing_path):
-            os.mkdir(testing_path)
+        makedir_exist_ok(testing_path)
+        # if not os.path.exists(testing_path):
+        #     os.mkdir(testing_path)
         torch.save(testset_data, os.path.join(testing_path, "testing_dataset_data.pth"))
         torch.save(testset_label, os.path.join(testing_path, "testing_dataset_label.pth"))

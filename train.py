@@ -8,6 +8,7 @@ from argparse import ArgumentParser
 from pytorch_lightning import Trainer, seed_everything
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger, TensorBoardLogger
+from torchvision.datasets.utils import makedir_exist_ok
 
 from data import EMNISTData
 from module import EMNISTModule
@@ -48,6 +49,7 @@ def main(args):
 
     model = EMNISTModule(args)
     data = EMNISTData(args)
+    makedir_exist_ok(args.filepath)
     trainloader = data.train_dataloader()
     data.save_train_data(trainloader, args.filepath)
     testloader = data.test_dataloader()
